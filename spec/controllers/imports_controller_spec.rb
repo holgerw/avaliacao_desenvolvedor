@@ -9,7 +9,7 @@ RSpec.describe ImportsController, :type => :controller do
       Purchase.delete_all
     end
 
-    it 'persists the import' do
+    it 'persists the information that an import occured' do
       post :create, import: { file: @file }
       expect(Import.count).to eq 1
     end
