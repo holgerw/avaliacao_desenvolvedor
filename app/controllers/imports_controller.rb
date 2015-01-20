@@ -3,6 +3,7 @@ class ImportsController < ApplicationController
   # GET /imports/new
   def new
     @import = Import.new
+    @import_history = Import.order(created_at: :desc)
   end
 
   # POST /imports
