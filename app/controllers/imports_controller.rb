@@ -10,6 +10,7 @@ class ImportsController < ApplicationController
     save_path = persist_upload(params[:import][:file])
     @import = Import.new(saved_file: save_path)
     if @import.save
+      @import.perform_import!
       redirect_to new_import_path, notice: 'Import was successfully created.'
     else
       render :new

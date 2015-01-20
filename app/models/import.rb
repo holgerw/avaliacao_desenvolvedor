@@ -14,21 +14,32 @@ require 'csv'
 
 class Import < ActiveRecord::Base
 
-  has_many :purchases
+  has_many :purchases, dependent: :destroy
   validates :saved_file, presence: true
   attr_accessor :file, :purchase_data
 
+  #####################################
+  # Public interface to be invoced from controller
+  #####################################
+  def perform_import!
+    parse_file
+    save_purchases
+  end
+
+
+  #####################################
+  # Descrete steps of the business operation
+  # Exposed publicly for testing reasons only
+  #####################################
   def parse_file
     return nil unless File.file?(saved_file)
     self.purchase_data = CSV.read(saved_file, { :col_sep => "\t" })
     header = purchase_data.shift
-    header.map! { |item| Import.normalize_string(item).to_sym }
+    header.map! { |item| normalize_string(item).to_sym }
     purchase_data.map! do |row|
       row_hash = {}
       row.each_with_index do |item, index|
         row_hash[ header[index] ] = item
-        #row_hash[ header[index] ] = item if header[index] == :preco_uniario
-        #row_hash[ header[index] ] = item.to_i if header[index] == :quantidade
       end
       row_hash
     end
@@ -49,8 +60,7 @@ class Import < ActiveRecord::Base
     end
   end
 
-  # auxiliar methods (public for testing purpose)
-  def self.normalize_string orig_string
+  def normalize_string orig_string
     ascii_string = ActiveSupport::Inflector.transliterate( orig_string )
     ascii_string.downcase.gsub(' ', '_')
   end
