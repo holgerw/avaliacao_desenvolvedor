@@ -9,6 +9,7 @@
 https://github.com/holgerw/avaliacao_desenvolvedor.git
 cd avaliacao_desenvolvedor
 bundle install
+bundle exec rake db:migrate
 bundle exec rails server
 ```
 A aplicação pode ser acessada em http://localhost:3000
