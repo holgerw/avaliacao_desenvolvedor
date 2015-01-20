@@ -19,7 +19,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'jbuilder', '~> 2.0'
 
 #################################
 # Development related
@@ -30,6 +29,7 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'rspec-rails', '~> 3.1.0'
+  gem 'annotate', '~> 2.6.5'
 end
 
 #################################
