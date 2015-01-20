@@ -6,6 +6,8 @@
 #  saved_file :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  started    :boolean          default("f")
+#  completed  :boolean          default("f")
 #
 
 require 'rails_helper'

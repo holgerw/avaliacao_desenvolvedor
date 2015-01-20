@@ -6,27 +6,46 @@
 #  saved_file :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  started    :boolean          default("f")
+#  completed  :boolean          default("f")
 #
 
 require 'csv'
 
 class Import < ActiveRecord::Base
-  # non persistent attributes
-  attr_accessor :file, :import_data
-  # validations
+
+  has_many :purchases
   validates :saved_file, presence: true
+  attr_accessor :file, :purchase_data
 
   def parse_file
     return nil unless File.file?(saved_file)
-    self.import_data = CSV.read(saved_file, { :col_sep => "\t" })
-    header = import_data.shift
+    self.purchase_data = CSV.read(saved_file, { :col_sep => "\t" })
+    header = purchase_data.shift
     header.map! { |item| Import.normalize_string(item).to_sym }
-    import_data.map! do |row|
+    purchase_data.map! do |row|
       row_hash = {}
       row.each_with_index do |item, index|
         row_hash[ header[index] ] = item
+        #row_hash[ header[index] ] = item if header[index] == :preco_uniario
+        #row_hash[ header[index] ] = item.to_i if header[index] == :quantidade
       end
       row_hash
+    end
+  end
+
+  def save_purchases
+    return if started # guarantee save_purchase is idempotent
+    return if purchase_data.blank? # expect file parsing before persisting
+    self.update_attribute(:started, true)
+    begin
+      purchase_data.each do | purchase |
+        self.purchases.create!(purchase)
+      end
+      self.update_attribute(:completed, true)
+    rescue
+      # any failure during purchase persistence will
+      # documentd by Import#completed = falses
     end
   end
 

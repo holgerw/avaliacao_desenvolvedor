@@ -11,12 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120130741) do
+ActiveRecord::Schema.define(version: 20150120155050) do
 
   create_table "imports", force: :cascade do |t|
     t.string   "saved_file"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "started",    default: false
+    t.boolean  "completed",  default: false
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.string   "comprador"
+    t.string   "descricao"
+    t.decimal  "preco_uniario", precision: 16, scale: 2
+    t.integer  "quantidade"
+    t.string   "endereco"
+    t.string   "fornecedor"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "import_id"
   end
 
 end
