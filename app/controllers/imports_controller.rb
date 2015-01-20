@@ -7,16 +7,22 @@ class ImportsController < ApplicationController
 
   # POST /imports
   def create
-    @import = Import.new(import_params)
+    save_path = persist_upload(params[:import][:file])
+    @import = Import.new(saved_file: save_path)
     if @import.save
-      format.html { redirect_to @import, notice: 'Import was successfully created.' }
+      redirect_to new_import_path, notice: 'Import was successfully created.'
     else
-      format.html { render :new }
+      render :new
     end
   end
 
   private
-    def import_params
-      params.require(:import).permit(:file)
+    def persist_upload( upload )
+      save_path = Rails.root.join('uploads', "#{SecureRandom.uuid}.txt")
+      File.open(save_path, 'wb') do |file|
+        file.write(upload.read)
+      end
+      save_path
     end
+
 end

@@ -10,6 +10,7 @@
 
 class Import < ActiveRecord::Base
 
+  # non persistent attribute
   attr_accessor :file
 
 end

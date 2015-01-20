@@ -18,4 +18,5 @@
 
 # Ignore aditional files
 .ruby-version
+uploads/*.txt
 
