@@ -25,12 +25,12 @@
       <table class="table table-striped">
         <tr>
           <th>Data</th>
-          <th>Quantidade (registros importados)</th>
+          <th>Receita bruta total</th>
         </tr>
         <% @import_history.each do |import| %>
         <tr>
           <td><%= creation_date(import) %></td>
-          <td><%= size(import) %></td>
+          <td><%= import.total_despense %></td>
         <tr>
         <% end %>
       </table>

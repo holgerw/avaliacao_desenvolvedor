@@ -16,4 +16,8 @@
 
 class Purchase < ActiveRecord::Base
   belongs_to :import
+
+  def total_despense
+    preco_uniario * quantidade
+  end
 end

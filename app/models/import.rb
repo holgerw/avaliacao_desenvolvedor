@@ -19,11 +19,15 @@ class Import < ActiveRecord::Base
   attr_accessor :file, :purchase_data
 
   #####################################
-  # Public interface to be invoced from controller
+  # Public interface to be invoced
   #####################################
   def perform_import!
     parse_file
     save_purchases
+  end
+
+  def total_despense
+    purchases.inject(0) {|sum,purchase| sum + purchase.total_despense  }
   end
 
 
